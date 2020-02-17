@@ -1,11 +1,13 @@
-package testdb
+package restdb
 
 import (
 	"database/sql"
 	"fmt"
-	article "restfulGo/article"
 
-	_ "github.com/go-sql-driver/mysql"
+	//article "restfulGo/article"
+
+	"github.com/centric-lt/restful-go/internal/article"
+	_ "github.com/go-sql-driver/mysql" // mysql driver
 )
 
 var conn = dbConnection{driver: "mysql", credentials: "root:root@tcp(127.0.0.1:3306)/test"}

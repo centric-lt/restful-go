@@ -5,14 +5,15 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	article "restfulGo/article"
-	db "restfulGo/testdb"
+
+	"github.com/centric-lt/restful-go/internal/article"
+	"github.com/centric-lt/restful-go/internal/restdb"
 )
 
 func welcome(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "GET":
-		http.ServeFile(w, r, "index.html")
+		http.ServeFile(w, r, "web/html/index.html")
 	default:
 		http.Error(w, "404 not found.", http.StatusNotFound)
 	}
@@ -26,7 +27,7 @@ func posting(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		postArticle := article.Article{Title: r.FormValue("title"), Description: r.FormValue("description"), Content: r.FormValue("content")}
-		db.InsertArticle(postArticle)
+		restdb.InsertArticle(postArticle)
 		http.Redirect(w, r, "/", 301)
 	default:
 		http.Error(w, "404 not found.", http.StatusNotFound)
@@ -34,7 +35,7 @@ func posting(w http.ResponseWriter, r *http.Request) {
 }
 
 func allArticles(w http.ResponseWriter, r *http.Request) {
-	articles := db.SelectAllArticles()
+	articles := restdb.SelectAllArticles()
 	fmt.Println("Endpoint: All Articles")
 	json.NewEncoder(w).Encode(articles)
 }
@@ -47,7 +48,7 @@ func handleRequests() {
 }
 
 func main() {
-	db.Connect()
+	restdb.Connect()
 	handleRequests()
-	defer db.Close()
+	defer restdb.Close()
 }
