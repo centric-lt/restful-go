@@ -4,9 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 
-	//article "restfulGo/article"
-
-	"github.com/centric-lt/restful-go/internal/article"
+	"github.com/centric-lt/restful-go/internal/models/article"
 	_ "github.com/go-sql-driver/mysql" // mysql driver
 )
 
