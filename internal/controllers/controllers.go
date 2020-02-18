@@ -10,27 +10,17 @@ import (
 )
 
 func Welcome(w http.ResponseWriter, r *http.Request) {
-	switch r.Method {
-	case "GET":
-		http.ServeFile(w, r, "web/html/index.html")
-	default:
-		http.Error(w, "404 not found.", http.StatusNotFound)
-	}
+	http.ServeFile(w, r, "web/html/index.html")
 }
 
 func Posting(w http.ResponseWriter, r *http.Request) {
-	switch r.Method {
-	case "POST":
-		if err := r.ParseForm(); err != nil {
-			fmt.Fprintf(w, "ParseForm() err: %v", err)
-			return
-		}
-		postArticle := article.Article{Title: r.FormValue("title"), Description: r.FormValue("description"), Content: r.FormValue("content")}
-		restdb.InsertArticle(postArticle)
-		http.Redirect(w, r, "/", 301)
-	default:
-		http.Error(w, "404 not found.", http.StatusNotFound)
+	if err := r.ParseForm(); err != nil {
+		fmt.Fprintf(w, "ParseForm() err: %v", err)
+		return
 	}
+	postArticle := article.Article{Title: r.FormValue("title"), Description: r.FormValue("description"), Content: r.FormValue("content")}
+	restdb.InsertArticle(postArticle)
+	http.Redirect(w, r, "/", 301)
 }
 
 func AllArticles(w http.ResponseWriter, r *http.Request) {
